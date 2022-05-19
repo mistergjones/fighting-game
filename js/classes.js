@@ -5,7 +5,7 @@ class Sprite {
         imageSrc,
         scale = 1,
         framesMax = 1,
-        offset = { x: 0, y: 0 },
+        offset = { x: 0, y: 10 },
     }) {
         this.position = position;
 
