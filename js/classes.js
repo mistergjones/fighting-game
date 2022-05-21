@@ -136,8 +136,29 @@ class Fighter extends Sprite {
         }
 
         // udpat the the attack bar position so it will follow the player/enemy around
-        this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
-        this.attackBox.position.y = this.position.y + this.attackBox.offset.y;
+        if (player.direction.facing === "East") {
+            this.attackBox.position.x =
+                this.position.x + this.attackBox.offset.x;
+            this.attackBox.position.y =
+                this.position.y + this.attackBox.offset.y;
+        } else if (player.direction.facing === "West") {
+            this.attackBox.position.x =
+                this.position.x + this.attackBox.offset.x * -1 - 75;
+            this.attackBox.position.y =
+                this.position.y + this.attackBox.offset.y;
+        }
+
+        if (enemy.direction.facing === "West") {
+            enemy.attackBox.position.x =
+                this.position.x + enemy.attackBox.offset.x;
+            enemy.attackBox.position.y =
+                this.position.y + enemy.attackBox.offset.y;
+        } else if (enemy.direction.facing === "East") {
+            enemy.attackBox.position.x =
+                this.position.x + enemy.attackBox.offset.x * -1 - 115;
+            enemy.attackBox.position.y =
+                this.position.y + enemy.attackBox.offset.y;
+        }
 
         // this is where we draw the attack boxes to see where they are on the screen
         // c.fillRect(
@@ -171,16 +192,21 @@ class Fighter extends Sprite {
         // update the sprite to attacking
 
         if (player.direction.facing === "East") {
+            this.isAttacking = true;
             this.switchSprite("attack1");
         } else if (player.direction.facing === "West") {
+            this.isAttacking = true;
             this.switchSprite("attack1left");
         }
+
         if (enemy.direction.facing === "West") {
+            this.isAttacking = true;
             this.switchSprite("attack1");
         } else if (enemy.direction.facing === "East") {
-            this.switchSprite("attack1right");
+            console.log("DO WE HERE HET");
+            this.isAttacking = true;
+            this.switchSprite("attack1left");
         }
-        this.isAttacking = true;
     }
 
     takeHit() {
@@ -199,6 +225,7 @@ class Fighter extends Sprite {
             if (this.framesCurrent < this.sprites.death.framesMax - 1) {
                 this.dead = true;
             }
+
             return;
         }
 
@@ -206,8 +233,10 @@ class Fighter extends Sprite {
         // disable all other frames and return if we are attacking && only play the attack frames once.
 
         if (
-            this.image === this.sprites.attack1.image &&
-            this.framesCurrent < this.sprites.attack1.framesMax - 1
+            (this.image === this.sprites.attack1.image &&
+                this.framesCurrent < this.sprites.attack1.framesMax - 1) ||
+            (this.image === this.sprites.attack1left.image &&
+                this.framesCurrent < this.sprites.attack1left.framesMax - 1)
         ) {
             return;
         }
@@ -241,6 +270,7 @@ class Fighter extends Sprite {
                 case "attack1left": //For Saumari Mack
                     if (this.image !== this.sprites.attack1left.image) {
                         this.image = this.sprites.attack1left.image;
+
                         this.framesMax = this.sprites.attack1left.framesMax;
                         this.framesCurrent = 0;
                     }
@@ -261,6 +291,7 @@ class Fighter extends Sprite {
                     break;
             }
         }
+
         if (player.direction.facing === "East") {
             switch (sprite) {
                 case "idle":
@@ -295,6 +326,7 @@ class Fighter extends Sprite {
                 case "attack1":
                     if (this.image !== this.sprites.attack1.image) {
                         this.image = this.sprites.attack1.image;
+
                         this.framesMax = this.sprites.attack1.framesMax;
                         this.framesCurrent = 0;
                     }
@@ -347,10 +379,10 @@ class Fighter extends Sprite {
                         this.framesCurrent = 0;
                     }
                     break;
-                case "attack1":
-                    if (this.image !== this.sprites.attack1.image) {
-                        this.image = this.sprites.attack1.image;
-                        this.framesMax = this.sprites.attack1.framesMax;
+                case "attack1left":
+                    if (this.image !== this.sprites.attack1left.image) {
+                        this.image = this.sprites.attack1left.image;
+                        this.framesMax = this.sprites.attack1left.framesMax;
                         this.framesCurrent = 0;
                     }
                     break;
@@ -371,8 +403,6 @@ class Fighter extends Sprite {
             }
         }
         if (enemy.direction.facing === "East") {
-            // enemy must be facing EAST
-
             switch (sprite) {
                 case "idleright":
                     if (this.image !== this.sprites.idleright.image) {
@@ -404,10 +434,10 @@ class Fighter extends Sprite {
                         this.framesCurrent = 0;
                     }
                     break;
-                case "attack1right":
-                    if (this.image !== this.sprites.attack1right.image) {
-                        this.image = this.sprites.attack1right.image;
-                        this.framesMax = this.sprites.attack1right.framesMax;
+                case "attack1":
+                    if (this.image !== this.sprites.attack1.image) {
+                        this.image = this.sprites.attack1.image;
+                        this.framesMax = this.sprites.attack1.framesMax;
                         this.framesCurrent = 0;
                     }
                     break;

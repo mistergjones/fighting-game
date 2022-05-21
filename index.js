@@ -94,6 +94,10 @@ const player = new Fighter({
             imageSrc: "./img/samuraiMack/Death.png",
             framesMax: 6,
         },
+        deathleft: {
+            imageSrc: "./img/samuraiMack/DeathLeft.png",
+            framesMax: 6,
+        },
     },
     attackBox: {
         offset: {
@@ -104,7 +108,7 @@ const player = new Fighter({
         height: 50,
     },
     direction: {
-        facing: null,
+        facing: "East",
     },
     name: "Mack",
 });
@@ -169,8 +173,8 @@ const enemy = new Fighter({
             imageSrc: "./img/kenji/Attack1.png",
             framesMax: 4,
         },
-        attack1right: {
-            imageSrc: "./img/kenji/Attack1Right.png",
+        attack1left: {
+            imageSrc: "./img/kenji/KenjiAttack1Left.png",
             framesMax: 4,
         },
         takeHit: {
@@ -199,7 +203,7 @@ const enemy = new Fighter({
         height: 50,
     },
     direction: {
-        facing: null,
+        facing: "West",
     },
     name: "Kenji",
 });
@@ -285,7 +289,7 @@ function animate() {
 
         if (player.direction.facing === "East") {
             player.switchSprite("fall");
-        } else {
+        } else if (player.direction.facing === "West") {
             player.switchSprite("fallleft");
         }
     }
@@ -317,15 +321,14 @@ function animate() {
         enemy.direction.facing = "West";
         enemy.switchSprite("run");
     } else if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight") {
-        enemy.velocity.x = 5;
         enemy.direction.facing = "East";
+        enemy.velocity.x = 5;
         enemy.switchSprite("runright");
     } else {
         // default image for each frame when a key is not pressed
-
         if (enemy.direction.facing === "West") {
             enemy.switchSprite("idle");
-        } else {
+        } else if (enemy.direction.facing === "East") {
             enemy.switchSprite("idleright");
         }
     }
@@ -337,7 +340,7 @@ function animate() {
         // call the function to show the run images
         if (enemy.direction.facing === "West") {
             enemy.switchSprite("jump");
-        } else {
+        } else if (enemy.direction.facing === "East") {
             enemy.switchSprite("jumpright");
         }
     } else if (enemy.velocity.y > 0) {
@@ -345,8 +348,8 @@ function animate() {
         // when we are actually falling
         if (enemy.direction.facing === "West") {
             enemy.switchSprite("fall");
-        } else {
-            enemy.switchSprite("fallRight");
+        } else if (enemy.direction.facing === "East") {
+            enemy.switchSprite("fallright");
         }
     }
 
@@ -399,7 +402,7 @@ window.addEventListener("keydown", (event) => {
                 player.velocity.y = -20;
                 break;
             case " ":
-                player.isAttacking = true;
+                // player.isAttacking = true;
                 player.attack();
 
                 break;
@@ -428,7 +431,7 @@ window.addEventListener("keydown", (event) => {
                 enemy.velocity.y = -20;
                 break;
             case "ArrowDown":
-                enemy.isAttacking = true;
+                // enemy.isAttacking = true;
                 enemy.attack();
                 break;
         }
