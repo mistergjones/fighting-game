@@ -54,12 +54,24 @@ const player = new Fighter({
             imageSrc: "./img/samuraiMack/Idle.png",
             framesMax: 8,
         },
+        idleleft: {
+            imageSrc: "./img/samuraiMack/IdleLeft.png",
+            framesMax: 8,
+        },
         run: {
             imageSrc: "./img/samuraiMack/Run.png",
             framesMax: 8,
         },
+        runleft: {
+            imageSrc: "./img/samuraiMack/RunLeft.png",
+            framesMax: 8,
+        },
         jump: {
             imageSrc: "./img/samuraiMack/Jump.png",
+            framesMax: 2,
+        },
+        jumpleft: {
+            imageSrc: "./img/samuraiMack/JumpLeft.png",
             framesMax: 2,
         },
         fall: {
@@ -68,6 +80,10 @@ const player = new Fighter({
         },
         attack1: {
             imageSrc: "./img/samuraiMack/Attack1.png",
+            framesMax: 6,
+        },
+        attack1left: {
+            imageSrc: "./img/samuraiMack/Attack1Left.png",
             framesMax: 6,
         },
         takeHit: {
@@ -87,6 +103,10 @@ const player = new Fighter({
         width: 160,
         height: 50,
     },
+    direction: {
+        facing: null,
+    },
+    name: "Mack",
 });
 
 // INSTANTIATE THE ENEMY
@@ -116,28 +136,57 @@ const enemy = new Fighter({
             imageSrc: "./img/kenji/Idle.png",
             framesMax: 4,
         },
+        idleright: {
+            imageSrc: "./img/kenji/IdleRight.png",
+            framesMax: 4,
+        },
         run: {
             imageSrc: "./img/kenji/Run.png",
             framesMax: 8,
         },
+        runright: {
+            imageSrc: "./img/kenji/RunRight.png",
+            framesMax: 8,
+        },
+
         jump: {
             imageSrc: "./img/kenji/Jump.png",
+            framesMax: 2,
+        },
+        jumpright: {
+            imageSrc: "./img/kenji/JumpRight.png",
             framesMax: 2,
         },
         fall: {
             imageSrc: "./img/kenji/Fall.png",
             framesMax: 2,
         },
+        fallright: {
+            imageSrc: "./img/kenji/FallRight.png",
+            framesMax: 2,
+        },
         attack1: {
             imageSrc: "./img/kenji/Attack1.png",
+            framesMax: 4,
+        },
+        attack1right: {
+            imageSrc: "./img/kenji/Attack1Right.png",
             framesMax: 4,
         },
         takeHit: {
             imageSrc: "./img/kenji/TakeHit.png",
             framesMax: 3,
         },
+        takeHitright: {
+            imageSrc: "./img/kenji/TakeHitRight.png",
+            framesMax: 3,
+        },
         death: {
             imageSrc: "./img/kenji/Death.png",
+            framesMax: 7,
+        },
+        deathright: {
+            imageSrc: "./img/kenji/DeathRight.png",
             framesMax: 7,
         },
     },
@@ -149,6 +198,10 @@ const enemy = new Fighter({
         width: 160,
         height: 50,
     },
+    direction: {
+        facing: null,
+    },
+    name: "Kenji",
 });
 
 const keys = {
@@ -202,24 +255,39 @@ function animate() {
     if (keys.a.pressed && player.lastKey === "a") {
         player.velocity.x = -5;
         // call the function to show the run images
-        player.switchSprite("run");
+        player.direction.facing = "West";
+        player.switchSprite("runleft");
     } else if (keys.d.pressed && player.lastKey === "d") {
         player.velocity.x = 5;
+        player.direction.facing = "East";
         // call the function to show the run images
         player.switchSprite("run");
     } else {
         // default image for each frame when a key is not pressed
-        player.switchSprite("idle");
+        if (player.direction.facing === "East") {
+            player.switchSprite("idle");
+        } else if (player.direction.facing === "West") {
+            player.switchSprite("idleleft");
+        }
     }
 
     // 1a) PLAYER JUMPING
     // set the jump image when our V position is < 0. i.e. we are in the air
     if (player.velocity.y < 0) {
         // call the function to show the run images
-        player.switchSprite("jump");
+        if (player.direction.facing === "East") {
+            player.switchSprite("jump");
+        } else {
+            player.switchSprite("jumpleft");
+        }
     } else if (player.velocity.y > 0) {
         // when we are actually falling
-        player.switchSprite("fall");
+
+        if (player.direction.facing === "East") {
+            player.switchSprite("fall");
+        } else {
+            player.switchSprite("fallleft");
+        }
     }
 
     // 1a) PLAYER COLLISON and they hit the enemy
@@ -246,13 +314,20 @@ function animate() {
     // 1b) ENEMY MOVEMENT
     if (keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft") {
         enemy.velocity.x = -5;
+        enemy.direction.facing = "West";
         enemy.switchSprite("run");
     } else if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight") {
         enemy.velocity.x = 5;
-        enemy.switchSprite("run");
+        enemy.direction.facing = "East";
+        enemy.switchSprite("runright");
     } else {
         // default image for each frame when a key is not pressed
-        enemy.switchSprite("idle");
+
+        if (enemy.direction.facing === "West") {
+            enemy.switchSprite("idle");
+        } else {
+            enemy.switchSprite("idleright");
+        }
     }
 
     // 1b) ENEMY JUMPING
@@ -260,11 +335,19 @@ function animate() {
     if (enemy.velocity.y < 0) {
         // moving upwards
         // call the function to show the run images
-        enemy.switchSprite("jump");
+        if (enemy.direction.facing === "West") {
+            enemy.switchSprite("jump");
+        } else {
+            enemy.switchSprite("jumpright");
+        }
     } else if (enemy.velocity.y > 0) {
         // moving downwards
         // when we are actually falling
-        enemy.switchSprite("fall");
+        if (enemy.direction.facing === "West") {
+            enemy.switchSprite("fall");
+        } else {
+            enemy.switchSprite("fallRight");
+        }
     }
 
     // 1b) ENEMY COLLISON  - where the player gets hit
@@ -302,17 +385,23 @@ window.addEventListener("keydown", (event) => {
         switch (event.key) {
             case "d":
                 keys.d.pressed = true;
+                player.direction.facing = "East";
                 player.lastKey = "d";
+
                 break;
             case "a":
                 keys.a.pressed = true;
+                player.direction.facing = "West";
                 player.lastKey = "a";
+
                 break;
             case "w":
                 player.velocity.y = -20;
                 break;
             case " ":
+                player.isAttacking = true;
                 player.attack();
+
                 break;
 
             default:
@@ -325,11 +414,15 @@ window.addEventListener("keydown", (event) => {
             // cater for the enemy
             case "ArrowRight":
                 keys.ArrowRight.pressed = true;
+                enemy.direction.facing = "East";
                 enemy.lastKey = "ArrowRight";
+
                 break;
             case "ArrowLeft":
                 keys.ArrowLeft.pressed = true;
+                enemy.direction.facing = "West";
                 enemy.lastKey = "ArrowLeft";
+
                 break;
             case "ArrowUp":
                 enemy.velocity.y = -20;

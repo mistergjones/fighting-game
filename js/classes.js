@@ -13,6 +13,7 @@ class Sprite {
         this.height = 150;
         this.image = new Image();
         this.image.src = imageSrc;
+
         this.scale = scale;
         this.framesMax = framesMax;
         this.framesCurrent = 0; // used to cycle through the shop sprites to make it "move"
@@ -79,6 +80,8 @@ class Fighter extends Sprite {
             width: undefined,
             height: undefined,
         },
+        direction,
+        name,
     }) {
         // need to inherit and set these properties from the parent
         super({
@@ -112,6 +115,8 @@ class Fighter extends Sprite {
         this.framesHold = 5; //on every 5th frame, do the animation on the shop
         this.sprites = sprites;
         this.dead = false;
+        this.direction = direction;
+        this.name = name;
 
         // creaste the spritse ofject for all sprites and loop through and establish a new instance image for IDLE, RUN sprites etc
         for (const sprite in this.sprites) {
@@ -120,7 +125,6 @@ class Fighter extends Sprite {
             sprites[sprite].image = new Image();
             sprites[sprite].image.src = sprites[sprite].imageSrc;
         }
-        console.log("The sprites loaded are: ", this.sprites);
     }
 
     // update to move things in a loop
@@ -165,7 +169,17 @@ class Fighter extends Sprite {
 
     attack() {
         // update the sprite to attacking
-        this.switchSprite("attack1");
+
+        if (player.direction.facing === "East") {
+            this.switchSprite("attack1");
+        } else if (player.direction.facing === "West") {
+            this.switchSprite("attack1left");
+        }
+        if (enemy.direction.facing === "West") {
+            this.switchSprite("attack1");
+        } else if (enemy.direction.facing === "East") {
+            this.switchSprite("attack1right");
+        }
         this.isAttacking = true;
     }
 
@@ -190,6 +204,7 @@ class Fighter extends Sprite {
 
         // overriding all other animations with the attack anim
         // disable all other frames and return if we are attacking && only play the attack frames once.
+
         if (
             this.image === this.sprites.attack1.image &&
             this.framesCurrent < this.sprites.attack1.framesMax - 1
@@ -206,57 +221,211 @@ class Fighter extends Sprite {
 
         // if we are not attacking, proceed as normal
 
-        switch (sprite) {
-            case "idle":
-                if (this.image !== this.sprites.idle.image) {
-                    this.image = this.sprites.idle.image;
-                    this.framesMax = this.sprites.idle.framesMax;
-                    this.framesCurrent = 0;
-                }
-                break;
-            case "run":
-                if (this.image !== this.sprites.run.image) {
-                    this.image = this.sprites.run.image;
-                    this.framesMax = this.sprites.run.framesMax;
-                    this.framesCurrent = 0;
-                }
-                break;
-            case "jump":
-                if (this.image !== this.sprites.jump.image) {
-                    this.image = this.sprites.jump.image;
-                    this.framesMax = this.sprites.jump.framesMax;
-                    this.framesCurrent = 0;
-                }
-                break;
+        if (player.direction.facing === "West") {
+            switch (sprite) {
+                case "idleleft":
+                    if (this.image !== this.sprites.idleleft.image) {
+                        this.image = this.sprites.idleleft.image;
+                        this.framesMax = this.sprites.idleleft.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
 
-            case "fall":
-                if (this.image !== this.sprites.fall.image) {
-                    this.image = this.sprites.fall.image;
-                    this.framesMax = this.sprites.fall.framesMax;
-                    this.framesCurrent = 0;
-                }
-                break;
-            case "attack1":
-                if (this.image !== this.sprites.attack1.image) {
-                    this.image = this.sprites.attack1.image;
-                    this.framesMax = this.sprites.attack1.framesMax;
-                    this.framesCurrent = 0;
-                }
-                break;
-            case "takeHit":
-                if (this.image !== this.sprites.takeHit.image) {
-                    this.image = this.sprites.takeHit.image;
-                    this.framesMax = this.sprites.takeHit.framesMax;
-                    this.framesCurrent = 0;
-                }
-                break;
-            case "death":
-                if (this.image !== this.sprites.death.image) {
-                    this.image = this.sprites.death.image;
-                    this.framesMax = this.sprites.death.framesMax;
-                    this.framesCurrent = 0;
-                }
-                break;
+                case "runleft": //For Saumari Mack
+                    if (this.image !== this.sprites.runleft.image) {
+                        this.image = this.sprites.runleft.image;
+                        this.framesMax = this.sprites.runleft.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "attack1left": //For Saumari Mack
+                    if (this.image !== this.sprites.attack1left.image) {
+                        this.image = this.sprites.attack1left.image;
+                        this.framesMax = this.sprites.attack1left.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "jumpleft": //For Saumari Mack
+                    if (this.image !== this.sprites.jumpleft.image) {
+                        this.image = this.sprites.jumpleft.image;
+                        this.framesMax = this.sprites.jumpleft.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "deathleft": //For Saumari Mack
+                    if (this.image !== this.sprites.deathleft.image) {
+                        this.image = this.sprites.deathleft.image;
+                        this.framesMax = this.sprites.deathleft.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+            }
+        }
+        if (player.direction.facing === "East") {
+            switch (sprite) {
+                case "idle":
+                    if (this.image !== this.sprites.idle.image) {
+                        this.image = this.sprites.idle.image;
+                        this.framesMax = this.sprites.idle.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "run":
+                    if (this.image !== this.sprites.run.image) {
+                        this.image = this.sprites.run.image;
+                        this.framesMax = this.sprites.run.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "jump":
+                    if (this.image !== this.sprites.jump.image) {
+                        this.image = this.sprites.jump.image;
+                        this.framesMax = this.sprites.jump.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+
+                case "fall":
+                    if (this.image !== this.sprites.fall.image) {
+                        this.image = this.sprites.fall.image;
+                        this.framesMax = this.sprites.fall.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "attack1":
+                    if (this.image !== this.sprites.attack1.image) {
+                        this.image = this.sprites.attack1.image;
+                        this.framesMax = this.sprites.attack1.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "takeHit":
+                    if (this.image !== this.sprites.takeHit.image) {
+                        this.image = this.sprites.takeHit.image;
+                        this.framesMax = this.sprites.takeHit.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "death":
+                    if (this.image !== this.sprites.death.image) {
+                        this.image = this.sprites.death.image;
+                        this.framesMax = this.sprites.death.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+            }
+        }
+        if (enemy.direction.facing === "West") {
+            switch (sprite) {
+                case "idle":
+                    if (this.image !== this.sprites.idle.image) {
+                        this.image = this.sprites.idle.image;
+                        this.framesMax = this.sprites.idle.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "run":
+                    if (this.image !== this.sprites.run.image) {
+                        this.image = this.sprites.run.image;
+                        this.framesMax = this.sprites.run.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+
+                case "jump":
+                    if (this.image !== this.sprites.jump.image) {
+                        this.image = this.sprites.jump.image;
+                        this.framesMax = this.sprites.jump.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+
+                case "fall":
+                    if (this.image !== this.sprites.fall.image) {
+                        this.image = this.sprites.fall.image;
+                        this.framesMax = this.sprites.fall.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "attack1":
+                    if (this.image !== this.sprites.attack1.image) {
+                        this.image = this.sprites.attack1.image;
+                        this.framesMax = this.sprites.attack1.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "takeHit":
+                    if (this.image !== this.sprites.takeHit.image) {
+                        this.image = this.sprites.takeHit.image;
+                        this.framesMax = this.sprites.takeHit.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "death":
+                    if (this.image !== this.sprites.death.image) {
+                        this.image = this.sprites.death.image;
+                        this.framesMax = this.sprites.death.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+            }
+        }
+        if (enemy.direction.facing === "East") {
+            // enemy must be facing EAST
+
+            switch (sprite) {
+                case "idleright":
+                    if (this.image !== this.sprites.idleright.image) {
+                        this.image = this.sprites.idleright.image;
+                        this.framesMax = this.sprites.idleright.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "runright":
+                    if (this.image !== this.sprites.runright.image) {
+                        this.image = this.sprites.runright.image;
+                        this.framesMax = this.sprites.runright.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+
+                case "jumpright":
+                    if (this.image !== this.sprites.jumpright.image) {
+                        this.image = this.sprites.jumpright.image;
+                        this.framesMax = this.sprites.jumpright.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+
+                case "fallright":
+                    if (this.image !== this.sprites.fallright.image) {
+                        this.image = this.sprites.fallright.image;
+                        this.framesMax = this.sprites.fallright.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "attack1right":
+                    if (this.image !== this.sprites.attack1right.image) {
+                        this.image = this.sprites.attack1right.image;
+                        this.framesMax = this.sprites.attack1right.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "takeHitright":
+                    if (this.image !== this.sprites.takehitright.image) {
+                        this.image = this.sprites.takehitright.image;
+                        this.framesMax = this.sprites.takehitright.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+                case "deathright":
+                    if (this.image !== this.sprites.deathright.image) {
+                        this.image = this.sprites.deathright.image;
+                        this.framesMax = this.sprites.deathright.framesMax;
+                        this.framesCurrent = 0;
+                    }
+                    break;
+            }
         }
     }
 }
