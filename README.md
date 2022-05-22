@@ -1,4 +1,4 @@
-# Drunken Master (Basic 2 Figher Game)
+# Drunken Master (Basic 2 Fighter Game)
 
 ## Table of contents
 
