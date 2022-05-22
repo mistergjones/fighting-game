@@ -86,6 +86,7 @@ const player = new Fighter({
             imageSrc: "./img/samuraiMack/Attack1Left.png",
             framesMax: 6,
         },
+
         takeHit: {
             imageSrc: "./img/samuraiMack/Take Hit - white silhouette.png",
             framesMax: 4,
@@ -177,6 +178,7 @@ const enemy = new Fighter({
             imageSrc: "./img/kenji/KenjiAttack1Left.png",
             framesMax: 4,
         },
+
         takeHit: {
             imageSrc: "./img/kenji/TakeHit.png",
             framesMax: 3,
@@ -317,8 +319,9 @@ function animate() {
 
     // 1b) ENEMY MOVEMENT
     if (keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft") {
-        enemy.velocity.x = -5;
         enemy.direction.facing = "West";
+        enemy.velocity.x = -5;
+
         enemy.switchSprite("run");
     } else if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight") {
         enemy.direction.facing = "East";
