@@ -23,7 +23,8 @@ class Sprite {
     }
 
     draw() {
-        // use a cavas runctino to draw the background image
+        // use a cavas runctino to draw the background image and all other images
+
         c.drawImage(
             this.image,
 
@@ -32,6 +33,7 @@ class Sprite {
             0,
             this.image.width / this.framesMax, /// number of frames
             this.image.height,
+
             // now for the actual image location
             this.position.x - this.offset.x,
             this.position.y - this.offset.y,
@@ -198,12 +200,10 @@ class Fighter extends Sprite {
             this.isAttacking = true;
             this.switchSprite("attack1left");
         }
-
         if (enemy.direction.facing === "West") {
             this.isAttacking = true;
             this.switchSprite("attack1");
         } else if (enemy.direction.facing === "East") {
-            console.log("DO WE HERE HET");
             this.isAttacking = true;
             this.switchSprite("attack1left");
         }
