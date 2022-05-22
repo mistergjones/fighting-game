@@ -29,7 +29,6 @@ The challenge of this prototype game was to implement a purely JS game that make
 
 -   Player 1: A (left) || D (right) || W (jump) || SPACE (attack)
 -   Player 2: Left Arrow || Right Arrow || Up Arrow || Down Arrow (attack)
--   Solution Code Frontend: [https://github.com/mistergjones/fighting-game]
 
 ### Links
 
